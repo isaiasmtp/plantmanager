@@ -1,19 +1,26 @@
 import { useNavigation } from '@react-navigation/core'
 import React, { useState } from 'react'
-import { Text, SafeAreaView, StyleSheet, View, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { Text, SafeAreaView, StyleSheet, View, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native'
 import { Button } from '../components/Button'
 
 import colors from '../styles/colors'
 import fonts from '../styles/fonts'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 export function UserIdentification() {
     const [isFocused, setIsFocused] = useState(false)
     const [isFilled, setIsFilled] = useState(false)
-    const [name, setName] = useState<String>()
+    const [name, setName] = useState<string>()
 
     const navigation = useNavigation()
 
-    function handleSubmit(){
+    async function handleSubmit(){
+        if(!name)
+        return Alert.alert('Me diz como chamar você 🥲')
+
+        await AsyncStorage.setItem('@plantmanager:user',name)
+
         navigation.navigate('Confirmation')
     }
 
@@ -26,7 +33,7 @@ export function UserIdentification() {
         setIsFocused(true)
     }
 
-    function handleInputChange(value: String){
+    function handleInputChange(value: string){
         setIsFilled(!!value)
         setName(value)  
     }
