@@ -9,6 +9,7 @@ import { EnvironmentButton } from '../components/EnvironmentButton'
 import api from '../services/api'
 import { PlantCardPrimary } from '../components/PlantCardPrimary'
 import { Load } from '../components/Load'
+import { PlantProps } from '../libs/storage'
 
 
 interface EnvironmentProps {
@@ -16,18 +17,6 @@ interface EnvironmentProps {
     title: string
 }
 
-interface PlantProps {
-    id: string;
-    name: string;
-    about: string;
-    water_tips: string;
-    photo: string; //storage.googleapis.com/golden-wind/nextlevelweek/05-plantmanager/1.svg;
-    environments: [string];
-    frequency: {
-        times: number;
-        repeat_every: string;
-    }
-}
 
 export function PlantSelect() {
     const [environments, setEnvironments] = useState<EnvironmentProps[]>([])
