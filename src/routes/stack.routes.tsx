@@ -8,7 +8,6 @@ import { Confirmation } from '../pages/Confirmation';
 
 import colors from '../styles/colors'
 import { PlantSave } from '../pages/PlantSave';
-import { MyPlants } from '../pages/MyPlants';
 import AuthRoutes from './tab.routes';
 
 const stackRoutes = createStackNavigator()

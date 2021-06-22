@@ -5,7 +5,8 @@ import {
     View,
     Text,
     Image,
-    Platform
+    Platform,
+    ScrollView
  } from 'react-native'
 import { getBottomSpace } from 'react-native-iphone-x-helper'
 import { SvgFromUri } from 'react-native-svg'
@@ -73,66 +74,71 @@ export function PlantSave(){
     }
 
     return (
-        <View style={ styles.container }>
-            <View style={ styles.plantInfo }>
-                <SvgFromUri 
-                    uri={plant.photo}
-                    height={150}
-                    width={150}
-                />
-
-                <Text style={ styles.plantName }>
-                    { plant.name }
-                </Text>
-
-                <Text style={ styles.plantAbout }>
-                    { plant.about }
-                </Text>
-            </View>
-
-            <View style={ styles.controller }>
-                <View style={ styles.tipContainer }>
-                    <Image 
-                        source={waterdrop}
-                        style={styles.tipImage}
+        <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.container}
+        >
+            <View style={ styles.container }>
+                <View style={ styles.plantInfo }>
+                    <SvgFromUri 
+                        uri={plant.photo}
+                        height={150}
+                        width={150}
                     />
-                    <Text style={ styles.tipText }>
-                        { plant.water_tips }
+
+                    <Text style={ styles.plantName }>
+                        { plant.name }
+                    </Text>
+
+                    <Text style={ styles.plantAbout }>
+                        { plant.about }
                     </Text>
                 </View>
 
-                <Text style={ styles.alertLabel }>
-                    Escolha o melhor hórario para ser lembrado
-                </Text>
+                <View style={ styles.controller }>
+                    <View style={ styles.tipContainer }>
+                        <Image 
+                            source={waterdrop}
+                            style={styles.tipImage}
+                        />
+                        <Text style={ styles.tipText }>
+                            { plant.water_tips }
+                        </Text>
+                    </View>
 
-                { showDatePicker && (
-                    <DataTimePicker 
-                        value = { selectedDateTime }
-                        mode = 'time'
-                        display = 'spinner'
-                        onChange = { handleChangeTime } 
-                    />)
-                }
+                    <Text style={ styles.alertLabel }>
+                        Escolha o melhor hórario para ser lembrado
+                    </Text>
 
-                { 
-                    Platform.OS == 'android' && (
-                        <TouchableOpacity 
-                            style={styles.dataTimePickerButton}
-                            onPress={ handleOpenDataPickerForAndroid }
-                        >
-                                <Text style={styles.dataTimePickerText}> 
-                                    {`Mudar horário\n${format(selectedDateTime, 'HH:mm')}` }
-                                </Text>
-                        </TouchableOpacity>
-                    )
-                }
+                    { showDatePicker && (
+                        <DataTimePicker 
+                            value = { selectedDateTime }
+                            mode = 'time'
+                            display = 'spinner'
+                            onChange = { handleChangeTime } 
+                        />)
+                    }
 
-                <Button 
-                    title="Cadastrar planta"
-                    onPress={ handleSavePlant }
-                />
+                    { 
+                        Platform.OS == 'android' && (
+                            <TouchableOpacity 
+                                style={styles.dataTimePickerButton}
+                                onPress={ handleOpenDataPickerForAndroid }
+                            >
+                                    <Text style={styles.dataTimePickerText}> 
+                                        {`Mudar horário\n${format(selectedDateTime, 'HH:mm')}` }
+                                    </Text>
+                            </TouchableOpacity>
+                        )
+                    }
+
+                    <Button 
+                        title="Cadastrar planta"
+                        onPress={ handleSavePlant }
+                    />
+                </View>
             </View>
-        </View>
+        </ScrollView>
      )
  }
 

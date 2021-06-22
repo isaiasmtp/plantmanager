@@ -3,7 +3,8 @@ import {
     StyleSheet,
     View,
     Image,
-    Text
+    Text,
+    Alert
 } from 'react-native'
 
 import { Header } from '../components/Header'
@@ -11,16 +12,40 @@ import { Header } from '../components/Header'
 import colors from '../styles/colors'
 import waterdrop from '../assets/waterdrop.png'
 import { FlatList } from 'react-native-gesture-handler'
-import { loadPlant, PlantProps } from '../libs/storage'
+import { loadPlant, PlantProps, removePlant } from '../libs/storage'
 import { formatDistance } from 'date-fns/esm'
 import { pt } from 'date-fns/locale'
 import fonts from '../styles/fonts'
+
 import { PlantCardSecundary } from '../components/PlantCardSecundary'
+import { Load } from '../components/Load'
 
 export function MyPlants() {
     const [myPlants, setMyPlants] = useState<PlantProps[]>([])
     const [loading, setLoading] = useState(true)
     const [nextWaterd, setNextWaterd] = useState<string>()
+
+    function handleRemove(plant: PlantProps){
+        Alert.alert('Remover', `Deseja remover a ${plant.name}?`,[
+            {
+                text: 'Não 🙏🏻',
+                style: 'cancel'
+            },
+            {
+                text: 'Sim 🥲',
+                onPress: async () => {
+                    try {
+                        await removePlant(plant.id) 
+                        setMyPlants((oldData) => 
+                            oldData.filter((item) => item.id != plant.id)
+                        )
+                    } catch {
+                        Alert.alert('Não foi possível remover! 🥲')
+                    }
+                }
+            }
+        ])
+    }
 
     useEffect(() => {
         async function loadStoragedData() {
@@ -30,7 +55,7 @@ export function MyPlants() {
                 new Date(plantsStoraged[0].dateTimeNotification).getTime(), 
                 new Date().getTime(), 
                 { locale: pt}
-            )
+            )            
 
             setNextWaterd(
                 `Não esqueça de regar a ${plantsStoraged[0].name} à ${nextTime}.`
@@ -41,6 +66,10 @@ export function MyPlants() {
         }
         loadStoragedData()
     },[])
+
+    if(loading)
+        return <Load />
+
 
     return (
         <View style={ styles.container }>
@@ -65,7 +94,9 @@ export function MyPlants() {
                     keyExtractor={(item) => String(item.id)}
                     showsVerticalScrollIndicator = {false}
                     renderItem={({ item }) => (
-                        <PlantCardSecundary data={item} />
+                        <PlantCardSecundary 
+                        handleRemove={() => { handleRemove(item) }}
+                        data={item} />
                     )}
                     contentContainerStyle={{ flex: 0 }}
 
